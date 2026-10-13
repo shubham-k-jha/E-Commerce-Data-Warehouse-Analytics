@@ -1,462 +1,407 @@
+
 # E-Commerce Data Warehouse & Analytics
 
-> 🚧 **Project Status: In Progress**
+> 🚧 **Status: Work in Progress**
 
-A portfolio project focused on building an end-to-end **e-commerce data analytics and data modeling pipeline** using a large-scale event dataset.
+An e-commerce analytics and data-modeling project being developed entirely in **Kaggle Notebooks**, using Python, SQL, DuckDB, and Parquet.
 
-The project is being developed entirely in **Kaggle**, using Python, DuckDB, SQL, and analytical data modeling techniques.
+The goal is to transform large-scale e-commerce behavioral data into a validated analytical data model, business insights, and reporting-ready datasets.
 
 ---
 
-## 📌 Project Overview
+## Dataset
 
-This project analyzes large-scale e-commerce behavioral data containing user interactions such as:
+**Source:** [eCommerce Behavior Data from Multi-Category Store — Kaggle](https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store)
 
-* Product views
-* Add-to-cart events
-* Cart removals
-* Purchases
-* Products
-* Categories
-* Brands
-* Users
-* Sessions
-* Prices
-* Timestamps
+The dataset contains event-level online shopping behavior, including product views, cart activity, and purchases.
 
-The goal is to move beyond basic exploratory data analysis and build a **proper analytical data model** capable of supporting business intelligence and decision-making.
+### Dataset Columns
 
-### Current Architecture
+| Column | Description |
+|---|---|
+| `event_time` | Timestamp of the event |
+| `event_type` | Event type: `view`, `cart`, `remove_from_cart`, or `purchase` |
+| `product_id` | Product identifier |
+| `category_id` | Category identifier |
+| `category_code` | Product category code |
+| `brand` | Brand name |
+| `price` | Recorded product price |
+| `user_id` | User identifier |
+| `user_session` | Session identifier |
+
+**Processing note:** The complete dataset is very large. DuckDB will be used to process the data efficiently rather than loading the entire dataset into Pandas at once.
+
+The exact files and schemas will be verified in the Kaggle environment before processing.
+
+---
+
+## Project Objectives
+
+- Inspect and profile the source data.
+- Validate data types, missing values, duplicates, timestamps, identifiers, and prices.
+- Build a reproducible processing workflow inside Kaggle.
+- Use DuckDB and Parquet for efficient analytical processing.
+- Define data grain and design a dimensional model.
+- Build and validate fact and dimension tables.
+- Perform analytical SQL queries.
+- Analyze customer, product, category, brand, session, and time-based behavior.
+- Conduct funnel, RFM, cohort, and retention analysis.
+- Generate documented business KPIs.
+- Prepare analytical datasets for Power BI.
+
+---
+
+## Planned Architecture
 
 ```text
 Kaggle Dataset
-      │
-      ▼
-Data Ingestion
-      │
-      ▼
-Data Cleaning & Quality Checks
-      │
-      ▼
-DuckDB
-      │
-      ▼
-Staging Layer
-      │
-      ▼
-Enriched Data
-      │
-      ▼
-Star Schema / Data Warehouse
-      │
-      ├── Fact Event
-      │
-      ├── Dim User
-      ├── Dim Product
-      ├── Dim Category
-      └── Dim Date
-      │
-      ▼
+      |
+      v
+Data Inspection & Ingestion
+      |
+      v
+Data Quality Checks
+      |
+      v
+DuckDB Staging Layer
+      |
+      v
+Standardized / Enriched Events
+      |
+      v
+Dimensional Data Model
+      |
+      +-- FACT_EVENT
+      +-- DIM_DATE
+      +-- DIM_USER
+      +-- DIM_PRODUCT
+      +-- DIM_CATEGORY
+      |
+      v
 SQL Analytics
-      │
-      ▼
-Business Analytics
-      │
-      ├── Sales & Revenue
-      ├── Customer Analytics
-      ├── Product Analytics
-      ├── Funnel Analysis
-      ├── RFM Analysis
-      ├── Cohort Analysis
-      └── Retention Analysis
-      │
-      ▼
-Power BI / Visualization
+      |
+      v
+Analytical Data Marts
+      |
+      v
+Visualizations / Power BI-ready Outputs
 ```
 
 ---
 
-## 🎯 Objectives
-
-The main objectives of this project are to:
-
-1. Work with a genuinely large e-commerce event dataset.
-2. Build an efficient data ingestion and processing workflow.
-3. Perform data-quality and validation checks.
-4. Understand and define data grain.
-5. Design a dimensional data model.
-6. Build fact and dimension tables.
-7. Perform analytical SQL queries.
-8. Analyze customer and product behavior.
-9. Build e-commerce conversion funnels.
-10. Perform RFM and cohort analysis.
-11. Generate business-oriented KPIs.
-12. Create Power BI-ready analytical datasets.
-
----
-
-## 📊 Dataset
-
-The project uses the **eCommerce Behavior Data from Multi-Category Store** dataset available on Kaggle.
-
-The dataset contains event-level e-commerce interactions including:
-
-| Column          | Description                               |
-| --------------- | ----------------------------------------- |
-| `event_time`    | Timestamp of the event                    |
-| `event_type`    | View, cart, remove_from_cart, or purchase |
-| `product_id`    | Product identifier                        |
-| `category_id`   | Category identifier                       |
-| `category_code` | Product category                          |
-| `brand`         | Product brand                             |
-| `price`         | Product price                             |
-| `user_id`       | User identifier                           |
-| `user_session`  | User session identifier                   |
-
-The dataset contains hundreds of millions of events, making it suitable for demonstrating large-scale analytical processing.
-
----
-
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Programming
-
-* Python
-* SQL
+- Python
+- SQL
 
 ### Data Processing
+- DuckDB
+- Pandas
+- NumPy
+- PyArrow
 
-* Pandas
-* NumPy
-* DuckDB
-* PyArrow
-* Parquet
+### Storage
+- Parquet
+- DuckDB database
 
 ### Visualization
+- Matplotlib
+- Seaborn
 
-* Matplotlib
-* Seaborn
-* Power BI
+### Development Environment
+- Kaggle Notebooks
 
-### Environment
-
-* Kaggle Notebooks
+### Planned Reporting
+- Power BI
 
 ---
 
-## 🧱 Data Modeling
+## Data Modeling
 
-The project uses a **star-schema approach**.
+The initial design uses a **star schema** centered on `fact_event`.
 
 ### Fact Table
 
 #### `fact_event`
 
-**Grain:** One row represents one user/product event.
+**Grain:** One source event per row.
 
-Examples:
+Examples include:
 
-```text
-view
-cart
-remove_from_cart
-purchase
-```
+- Product view
+- Add to cart
+- Remove from cart
+- Purchase
+
+The fact table will contain event-level measures and foreign keys linking to relevant dimensions.
 
 ### Dimension Tables
 
-#### `dim_user`
+| Table | Purpose | Planned Grain |
+|---|---|---|
+| `dim_date` | Calendar attributes | One row per date |
+| `dim_user` | User attributes | One row per user |
+| `dim_product` | Product attributes | One row per product identifier |
+| `dim_category` | Category attributes | One row per category identifier |
 
-Contains user-level information.
-
-#### `dim_product`
-
-Contains product-level information.
-
-#### `dim_category`
-
-Contains category information.
-
-#### `dim_date`
-
-Contains calendar attributes used for time-based analysis.
-
-### Model
+### Planned Model
 
 ```text
-                    ┌──────────────┐
-                    │   DIM_DATE   │
-                    └──────┬───────┘
-                           │
-                           │
-┌─────────────┐      ┌────▼─────┐      ┌──────────────┐
-│  DIM_USER   │──────│ FACT_EVENT│──────│ DIM_PRODUCT  │
-└─────────────┘      └────┬─────┘      └──────────────┘
-                           │
-                           │
-                    ┌──────▼───────┐
-                    │ DIM_CATEGORY │
-                    └──────────────┘
+                    DIM_DATE
+                        |
+                        |
+DIM_USER -------- FACT_EVENT -------- DIM_PRODUCT
+                        |
+                        |
+                  DIM_CATEGORY
 ```
+
+The model will be revised if profiling reveals that additional dimensions or a different structure are necessary.
 
 ---
 
-## 📈 Planned Analysis
+## Planned Analyses
 
-### 1. Executive KPIs
+### 1. Business KPIs
 
-* Total events
-* Total users
-* Total sessions
-* Total purchases
-* Revenue
-* Average Order Value
-* Conversion rate
+- Total events
+- Total users
+- Total sessions
+- Purchase-event counts
+- Purchase value
+- Average Order Value, where the available data supports a defensible definition
+- Conversion rates with explicit denominators
+- Daily, weekly, and monthly trends
 
 ### 2. Revenue Analysis
 
-* Daily revenue
-* Weekly revenue
-* Monthly revenue
-* Revenue growth
-* Revenue by category
-* Revenue by brand
-* Revenue by product
+- Daily revenue
+- Weekly revenue
+- Monthly revenue
+- Month-over-month changes
+- Revenue by category
+- Revenue by brand
+- Revenue by product
 
 ### 3. Customer Analytics
 
-* Customer activity
-* Purchasing customers
-* Purchase frequency
-* Customer revenue
-* Customer lifetime value
-* New vs returning customers
+- Customer activity
+- Purchasing customers
+- Purchase frequency
+- Customer recency
+- Observed purchase value
+- New versus returning customers
+- Customer segmentation
 
 ### 4. Funnel Analysis
 
 ```text
 VIEW
- ↓
+  |
+  v
 CART
- ↓
+  |
+  v
 PURCHASE
 ```
 
-Metrics:
+Planned metrics:
 
-* View → Cart conversion
-* Cart → Purchase conversion
-* View → Purchase conversion
-* Cart abandonment
-* Funnel performance by category
-* Funnel performance by product
+- View-to-cart conversion
+- Cart-to-purchase conversion
+- View-to-purchase conversion
+- Funnel drop-off
+- Funnel comparisons by product
+- Funnel comparisons by category
+
+Funnel definitions will distinguish event counts from distinct users and sessions.
 
 ### 5. Product Analytics
 
-* Most viewed products
-* Most purchased products
-* Highest-revenue products
-* High-view / low-purchase products
-* Product conversion rate
-* Category performance
-* Brand performance
+- Most-viewed products
+- Most-purchased products
+- Highest-value products
+- High-view, low-purchase products
+- Product conversion
+- Category performance
+- Brand performance
 
 ### 6. RFM Analysis
 
-Customers will be segmented using:
+RFM stands for:
 
-```text
-R = Recency
-F = Frequency
-M = Monetary
-```
+- **Recency:** How recently a customer purchased.
+- **Frequency:** How often a customer purchased.
+- **Monetary:** The observed value of customer purchases.
 
-Potential segments include:
+Potential customer segments:
 
-* Champions
-* Loyal Customers
-* Recent Customers
-* Potential Customers
-* At-Risk High-Value Customers
-* Inactive Customers
+- Champions
+- Loyal Customers
+- Recent Customers
+- Potential Customers
+- At-Risk High-Value Customers
+- Inactive Customers
 
-### 7. Cohort Analysis
+Segment definitions will be documented and validated against the observed data.
 
-The project will analyze:
+### 7. Cohort and Retention Analysis
 
-* Customer acquisition cohorts
-* Monthly retention
-* Repeat purchasing
-* Cohort revenue
-* Customer lifecycle behavior
+- Customer acquisition cohorts
+- Monthly repeat purchasing
+- Cohort retention
+- Customer activity over time
+- Cohort-level purchase value
 
 ---
 
-## 🧪 Data Quality
+## Data Quality and Validation
 
-Data validation will include:
+The project will include checks for:
 
-* Missing-value analysis
-* Duplicate detection
-* Invalid prices
-* Invalid event types
-* Invalid identifiers
-* Timestamp validation
-* Referential integrity
-* Orphan-record detection
-* Fact/dimension reconciliation
+- Missing values
+- Duplicate records
+- Invalid event types
+- Invalid prices
+- Invalid identifiers
+- Timestamp parsing failures
+- Unexpected data types
+- Referential integrity
+- Orphan records
+- Dimension-key uniqueness
+- Fact-table row counts
+- Source-to-warehouse reconciliation
+
+Data cleaning decisions will be documented rather than silently dropping records.
 
 ---
 
-## 📁 Planned Repository Structure
+## Planned Repository Structure
 
 ```text
 ecommerce-data-warehouse/
-│
+|
 ├── README.md
-│
+|
 ├── notebooks/
-│   ├── 01_data_ingestion.ipynb
-│   ├── 02_data_quality.ipynb
-│   ├── 03_eda.ipynb
-│   ├── 04_business_analysis.ipynb
-│   ├── 05_customer_analytics.ipynb
-│   ├── 06_product_analytics.ipynb
-│   ├── 07_funnel_analysis.ipynb
-│   ├── 08_rfm_analysis.ipynb
-│   └── 09_cohort_analysis.ipynb
-│
+|   ├── 01_data_ingestion.ipynb
+|   ├── 02_data_quality.ipynb
+|   ├── 03_eda.ipynb
+|   ├── 04_business_analysis.ipynb
+|   ├── 05_customer_analytics.ipynb
+|   ├── 06_product_analytics.ipynb
+|   ├── 07_funnel_analysis.ipynb
+|   ├── 08_rfm_analysis.ipynb
+|   └── 09_cohort_analysis.ipynb
+|
 ├── sql/
-│   ├── staging.sql
-│   ├── dimensions.sql
-│   ├── facts.sql
-│   ├── data_quality.sql
-│   └── analytics.sql
-│
+|   ├── staging.sql
+|   ├── dimensions.sql
+|   ├── facts.sql
+|   ├── data_quality.sql
+|   └── analytics.sql
+|
 ├── src/
-│   ├── ingestion.py
-│   ├── cleaning.py
-│   └── validation.py
-│
-├── data/
-│   └── README.md
-│
+|   ├── ingestion.py
+|   ├── cleaning.py
+|   └── validation.py
+|
+├── docs/
+|   ├── data_dictionary.md
+|   ├── data_model.md
+|   └── business_requirements.md
+|
 ├── outputs/
-│   ├── monthly_kpis/
-│   ├── customer_360/
-│   └── product_performance/
-│
-├── powerbi/
-│   └── README.md
-│
-└── docs/
-    ├── data_dictionary.md
-    ├── data_model.md
-    └── business_requirements.md
+|
+└── powerbi/
 ```
 
+This is the planned structure. Files will be added as implementation progresses.
+
 ---
 
-## 🚧 Current Status
+## Current Project Status
 
-### Completed
+**Work in Progress**
 
-* [x] Dataset identified
-* [x] Kaggle environment selected
-* [x] Initial data ingestion approach
-* [x] DuckDB processing approach
-* [x] Data-grain definition
-* [x] Initial data-quality checks
-* [x] Staging layer
-* [x] Initial dimensional model
-* [x] Initial KPI analysis
+### Defined
+- [x] Dataset selected
+- [x] Initial project scope defined
+- [x] Initial architecture planned
+- [x] Initial data-model concept defined
 
 ### In Progress
+- [ ] Verify the attached Kaggle input files and schemas
+- [ ] Complete data profiling
+- [ ] Complete data-quality checks
+- [ ] Implement and validate the warehouse model
+- [ ] Complete SQL analytics
+- [ ] Complete customer and product analytics
+- [ ] Complete funnel analysis
+- [ ] Complete RFM segmentation
+- [ ] Complete cohort and retention analysis
+- [ ] Generate and validate analytical outputs
+- [ ] Build reporting visualizations
+- [ ] Document verified business insights
 
-* [ ] Complete data warehouse model
-* [ ] Advanced SQL analysis
-* [ ] Customer 360
-* [ ] RFM segmentation
-* [ ] Cohort analysis
-* [ ] Retention analysis
-* [ ] Advanced funnel analysis
-* [ ] Statistical analysis
-* [ ] Power BI dashboard
-* [ ] Final business insights
-* [ ] Project documentation
-
----
-
-## 🔍 Key Questions
-
-The project aims to answer questions such as:
-
-> Which products and categories generate the most revenue?
-
-> Where are customers dropping out of the purchase funnel?
-
-> Which products receive high traffic but have poor conversion?
-
-> Which customers generate the highest observed revenue?
-
-> How does customer retention change across acquisition cohorts?
-
-> Which brands and categories have the strongest purchase performance?
-
-> How does customer behavior vary over time?
-
-> What customer segments can be identified using RFM analysis?
+The checklist reflects project planning and development status; it does not imply that unverified components have already been implemented.
 
 ---
 
-## ⚠️ Important Modeling Assumptions
+## Important Analytical Assumptions
 
-The project explicitly documents analytical assumptions instead of treating them as source-system facts.
+### Order Identification
 
-For example, the source dataset does not provide a traditional explicit order ID. Therefore, order-level metrics may use `user_session` as an **analytical proxy**, with this limitation clearly documented.
+The dataset does not provide a conventional explicit order ID. A session identifier must not automatically be treated as a true order ID without validating the source semantics.
 
-Similarly, event-level, session-level, customer-level and product-level analyses are kept at their respective grains to avoid accidental double counting.
+If a session is used as an order proxy, that assumption and its limitations will be documented.
+
+### Revenue Calculation
+
+A purchase event's `price` is not necessarily equivalent to order-line revenue or total order value.
+
+Revenue metrics will be explicitly defined, and double counting will be checked. Where the available fields do not support a definitive business measure, the result will be labeled as a proxy.
+
+### Funnel Interpretation
+
+Counts of events, distinct users, and distinct sessions represent different measures. Each funnel metric will state which unit it uses.
+
+### Customer Identity
+
+User-level analysis will account for missing identifiers and the limitations of interpreting observed user IDs as complete real-world customer identities.
 
 ---
 
-## 📌 Project Status
+## Expected Deliverables
 
-**🚧 Work in Progress**
-
-This repository is actively being developed.
-
-The current focus is on building the **data warehouse, analytical data model, SQL layer, and business analytics** before finalizing the visualization/dashboard layer.
-
-More analyses, SQL queries, documentation, and dashboard components will be added as the project progresses.
+- Reproducible Kaggle notebooks
+- Data-quality reports
+- Documented dimensional model
+- DuckDB warehouse tables
+- SQL analytics
+- Customer and product analytical datasets
+- Funnel analysis
+- RFM segmentation
+- Cohort and retention analysis
+- Business KPI summaries
+- Visualizations
+- Power BI-ready outputs
+- Technical documentation
+- Business insights and recommendations
 
 ---
 
-## 👤 Author
+## Author
 
 **Shubham Jha**
 
-Data Analytics | Data Science | Python | SQL | Data Modeling | Power BI
+Data Analytics | Python | SQL | Data Modeling | Business Intelligence
 
 ---
 
-## ⭐ Why This Project?
+## Project Status
 
-This project is designed to demonstrate practical skills beyond basic Python and visualization, including:
+This repository is actively being developed.
 
-```text
-Data Engineering
-      +
-SQL
-      +
-Data Modeling
-      +
-Business Analytics
-      +
-Customer Analytics
-      +
-Statistical Analysis
-      +
-Business Intelligence
-```
-
-The objective is to demonstrate how raw, large-scale event data can be transformed into a structured analytical system capable of answering real business questions.
+The priority is **correctness, transparent assumptions, reproducibility, validated data modeling, and meaningful business analysis**—not simply generating charts.
