@@ -1,164 +1,88 @@
+<div align="center">
 
-<!-- ===================== HEADER ===================== -->
+# 🛒 E-Commerce Data Warehouse & Analytics
 
-<h1 align="center">🛒 E-Commerce Data Warehouse & Analytics</h1>
+### Turning millions of shopping events into decisions a business can actually use.
 
-<p align="center">
-  <strong>From Raw Shopping Events to Business Intelligence</strong>
-  <br>
-  A large-scale e-commerce analytics and data modeling project built in Kaggle.
-</p>
+A hands-on analytics engineering project built in **Kaggle Notebooks** with Python, SQL and DuckDB — using real e-commerce behavior data, not a toy dataset.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/STATUS-IN%20PROGRESS-orange?style=for-the-badge" alt="Project status: In progress">
-  <img src="https://img.shields.io/badge/PYTHON-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white" alt="SQL">
-  <img src="https://img.shields.io/badge/DUCKDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black" alt="DuckDB">
-  <img src="https://img.shields.io/badge/KAGGLE-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white" alt="Kaggle">
-</p>
+[![Stage 1](https://img.shields.io/badge/Stage%201-Complete-16A34A?style=for-the-badge)](#-development-status)
+[![Stage 2](https://img.shields.io/badge/Stage%202-In%20Progress-F59E0B?style=for-the-badge)](#-development-status)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white)
+![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)
+![Kaggle](https://img.shields.io/badge/Kaggle-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)
 
-<p align="center">
-  <a href="https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store">
-    📊 Explore the Dataset
-  </a>
-  &nbsp; • &nbsp;
-  <a href="#-data-architecture">Architecture</a>
-  &nbsp; • &nbsp;
-  <a href="#-analytics-roadmap">Analytics</a>
-  &nbsp; • &nbsp;
-  <a href="#-development-progress">Progress</a>
-</p>
+[Dataset](https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store) · [Architecture](#-the-journey) · [Data model](#-warehouse-design) · [Progress](#-development-status)
+
+</div>
 
 ---
 
-## 📌 Overview
+## 👋 Why this project exists
 
-This project aims to build an end-to-end analytical system using real-world e-commerce behavioral data.
+A chart can tell us what happened. A well-built data model helps us trust the numbers behind that chart — and explain what they mean.
 
-Rather than stopping at exploratory data analysis and charts, the project follows a structured workflow:
+This project follows e-commerce activity from raw events through a reusable warehouse and into business analysis. The goal is not just to produce attractive dashboards. It is to build a workflow that is **traceable, resource-aware, and honest about what the data can and cannot prove**.
 
-**Raw Data → Data Quality → Transformation → Data Warehouse → SQL Analytics → Business Insights**
+Everything is developed in **Kaggle Notebooks**. The workflow is designed around DuckDB so large event data can be queried without pulling the entire dataset into Pandas memory. No paid cloud warehouse is required.
 
-Development takes place in **Kaggle Notebooks**, using Python, SQL, DuckDB and Parquet.
-
-### 🎯 Project Goals
-
-| Workstream | Objective |
-|---|---|
-| Data Engineering | Ingest, transform and validate large datasets |
-| SQL Analytics | Build efficient analytical queries |
-| Data Modeling | Design fact tables, dimensions and a star schema |
-| Business Analytics | Measure revenue, conversion and product performance |
-| Customer Analytics | Explore RFM, cohorts and retention |
-| Data Quality | Validate data, keys and transformations |
-| Visualization | Create charts and reporting-ready outputs |
-
-> 🚧 **Current status:** Work in progress. Planned features are not claimed to be completed or production-tested.
-
----
-
-## 📊 Dataset
-
-### eCommerce Behavior Data from Multi-Category Store
-
-**Source:** [Open the dataset on Kaggle](https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store)
-
-The dataset contains event-level online shopping behavior, including product views, cart activity and purchases.
-
-### Dataset Schema
-
-| Column | Description | Analytical Use |
-|---|---|---|
-| `event_time` | Event timestamp | Time-series analysis |
-| `event_type` | Type of event | Funnel analysis |
-| `product_id` | Product identifier | Product performance |
-| `category_id` | Category identifier | Category analysis |
-| `category_code` | Product category code | Category reporting |
-| `brand` | Brand name | Brand performance |
-| `price` | Recorded product price | Purchase-value analysis |
-| `user_id` | User identifier | Customer analysis |
-| `user_session` | Session identifier | Session analysis |
-
-### 🛍️ Customer Event Journey
+## 🧭 The journey
 
 ```mermaid
-flowchart TD
-    A["Product Discovery"] --> B["View Product"]
-    B --> C["Add to Cart"]
-    C --> D{"Customer Action"}
-    D --> E["Purchase"]
-    D --> F["Remove from Cart"]
-    F --> G["Continue Browsing"]
-    G --> B
+flowchart LR
+    A["🗂️ Kaggle source data"] --> B["🔎 Inspect & profile"]
+    B --> C["🧹 Clean & standardize"]
+    C --> D["🦆 DuckDB staging"]
+    D --> E["🏗️ Fact & dimension tables"]
+    E --> F["📐 SQL analytics"]
+    F --> G["📊 Insights & reporting"]
+    style A fill:#DBEAFE,stroke:#2563EB,color:#172554
+    style B fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E
+    style C fill:#FEF3C7,stroke:#D97706,color:#78350F
+    style D fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    style E fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    style F fill:#FCE7F3,stroke:#DB2777,color:#831843
+    style G fill:#CCFBF1,stroke:#0F766E,color:#134E4A
 ```
 
-**Data scale:** The complete dataset is large. The exact attached Kaggle files and schemas will be inspected before processing. DuckDB will be used to avoid unnecessarily loading the entire dataset into Pandas memory.
-
----
-
-## 🏗️ Data Architecture
-
-The intended architecture separates ingestion, transformation, warehousing and business analytics.
-
-```mermaid
-flowchart TD
-    A["Kaggle Dataset"] --> B["Inspect Files and Schema"]
-    B --> C["Data Quality Checks"]
-    C --> D["DuckDB Staging Layer"]
-    D --> E["Standardization and Enrichment"]
-    E --> F["Dimensional Data Warehouse"]
-    F --> G["SQL Analytics"]
-    G --> H["Analytical Data Marts"]
-    H --> I["Visualizations"]
-    H --> J["Power BI-Ready Outputs"]
-
-    style A fill:#DCEBFF,stroke:#2563EB,color:#172554
-    style D fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E
-    style F fill:#DCFCE7,stroke:#16A34A,color:#14532D
-    style H fill:#F3E8FF,stroke:#9333EA,color:#581C87
-```
-
-### Architecture Layers
-
-| Layer | Responsibility |
+| Layer | What it does |
 |---|---|
-| Source | Kaggle dataset files |
-| Staging | Standardize names, data types and formats |
-| Enrichment | Derive useful analytical attributes |
-| Warehouse | Store fact and dimension tables |
-| Analytics | Calculate business metrics with SQL |
-| Data Marts | Create focused customer, product and KPI datasets |
-| Reporting | Produce visualizations and Power BI-ready outputs |
+| **Source** | Uses the real e-commerce behavior dataset attached to the Kaggle notebook. |
+| **Staging & enrichment** | Standardizes fields and prepares data for analysis. |
+| **Warehouse** | Organizes events and descriptive entities into fact and dimension tables. |
+| **Analytics** | Uses SQL to answer product, customer, funnel and time-based questions. |
+| **Reporting** | Produces clear charts and reusable outputs for business intelligence. |
 
----
+## 📦 Dataset
 
-## 🧱 Data Modeling
+**eCommerce Behavior Data from Multi-Category Store** — [view dataset on Kaggle](https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store).
 
-The initial design uses a **star schema**, subject to validation against the source data.
+The data records online shopping events such as product views, cart activity, cart removals and purchases. The principal fields include:
 
-### What is a Star Schema?
+| Field | What it helps investigate |
+|---|---|
+| `event_time` | Daily and monthly patterns |
+| `event_type` | Shopping behavior and funnel stages |
+| `product_id` | Product performance |
+| `category_id`, `category_code` | Category comparisons |
+| `brand` | Brand performance |
+| `price` | Recorded price and purchase-event-value analysis |
+| `user_id` | Observed user behavior |
+| `user_session` | Session-level activity |
 
-- **Fact table:** Stores business events and measurable values.
-- **Dimension table:** Describes entities used to filter and group facts.
-- **Grain:** Defines precisely what one row represents.
-- **Surrogate key:** A warehouse-generated identifier for a dimension record.
+The dataset is large, so query design and memory management matter. The project avoids assuming that all source rows can safely fit in memory at once.
 
-### Proposed Dimensional Model
+## 🏗️ Warehouse design
+
+The intended model is a star schema: a central event fact table connected to descriptive dimensions.
 
 ```mermaid
-flowchart TB
-    DATE["DIM_DATE"]
-    USER["DIM_USER"]
-    PRODUCT["DIM_PRODUCT"]
-    CATEGORY["DIM_CATEGORY"]
-
-    FACT["FACT_EVENT<br/>One source event per row"]
-
-    DATE --> FACT
-    USER --> FACT
-    PRODUCT --> FACT
-    CATEGORY --> FACT
-
+flowchart LR
+    DATE["📅 DIM_DATE"] --> FACT["🧾 FACT_EVENT"]
+    USER["👤 DIM_USER"] --> FACT
+    PRODUCT["🛍️ DIM_PRODUCT"] --> FACT
+    CATEGORY["🏷️ DIM_CATEGORY"] --> FACT
     style FACT fill:#DBEAFE,stroke:#2563EB,color:#172554
     style DATE fill:#DCFCE7,stroke:#16A34A,color:#14532D
     style USER fill:#DCFCE7,stroke:#16A34A,color:#14532D
@@ -166,277 +90,148 @@ flowchart TB
     style CATEGORY fill:#DCFCE7,stroke:#16A34A,color:#14532D
 ```
 
-### Planned Tables
-
-| Table | Grain | Purpose |
+| Table | Intended grain | Purpose |
 |---|---|---|
-| `fact_event` | One source event per row | Event-level analysis |
-| `dim_date` | One row per calendar date | Calendar analysis |
-| `dim_user` | One row per user identifier | Customer analysis |
-| `dim_product` | One row per product identifier | Product analysis |
-| `dim_category` | One row per category identifier | Category analysis |
+| `fact_event` | One source event per row | Core event-level analysis |
+| `dim_date` | One row per calendar date | Calendar grouping and filtering |
+| `dim_user` | One row per user identifier | Observed user analysis |
+| `dim_product` | One row per product identifier | Product reporting |
+| `dim_category` | One row per category identifier | Category reporting |
 
-The final model may change if data profiling reveals additional entities, key-quality problems or relationships that require a different design.
+The fact table has been created in the current notebook workflow. Validation remains important: dimension join keys must be unique, joins must not multiply source rows, and missing dimension keys must be reported rather than silently ignored.
 
----
+## 🧰 Tools used
 
-## 🛠️ Technology Stack
+<div align="center">
 
-<p>
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=postgresql&logoColor=white" alt="SQL">
-  <img src="https://img.shields.io/badge/DuckDB-FFF000?style=flat-square&logo=duckdb&logoColor=black" alt="DuckDB">
-  <img src="https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white" alt="Pandas">
-  <img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white" alt="NumPy">
-  <img src="https://img.shields.io/badge/Parquet-Columnar%20Storage-50ABF1?style=flat-square" alt="Parquet">
-  <img src="https://img.shields.io/badge/Matplotlib-Visualization-11557C?style=flat-square" alt="Matplotlib">
-  <img src="https://img.shields.io/badge/Kaggle-20BEFF?style=flat-square&logo=kaggle&logoColor=white" alt="Kaggle">
-</p>
+![Python](https://img.shields.io/badge/Python-Data%20processing-3776AB?style=flat-square&logo=python&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-Analytics-4479A1?style=flat-square&logo=postgresql&logoColor=white)
+![DuckDB](https://img.shields.io/badge/DuckDB-Analytical%20engine-FFF000?style=flat-square&logo=duckdb&logoColor=black)
+![Pandas](https://img.shields.io/badge/Pandas-Data%20inspection-150458?style=flat-square&logo=pandas&logoColor=white)
+![Parquet](https://img.shields.io/badge/Parquet-Columnar%20storage-50ABF1?style=flat-square)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-Visuals-11557C?style=flat-square)
+![Kaggle](https://img.shields.io/badge/Kaggle-Notebook%20runtime-20BEFF?style=flat-square&logo=kaggle&logoColor=white)
 
-| Technology | Role |
-|---|---|
-| Python | Processing and analytical workflows |
-| SQL | Transformation, aggregation and analysis |
-| DuckDB | Analytical query engine |
-| Pandas | Smaller analytical datasets |
-| NumPy | Numerical operations |
-| PyArrow / Parquet | Columnar storage and data exchange |
-| Matplotlib / Seaborn | Visualization |
-| Kaggle Notebooks | Development environment |
-| Power BI | Planned reporting and dashboard layer |
+</div>
 
----
+- **Kaggle Notebooks** — development and execution environment.
+- **DuckDB + SQL** — querying, transformations and analytics on large data.
+- **Python / Pandas** — orchestration and inspection of manageable result sets.
+- **Parquet** — planned efficient storage and exchange format where useful.
+- **Matplotlib** — visual summaries of analytical results.
+- **Power BI** — optional downstream reporting; it does not run inside Kaggle itself.
 
-## 📈 Analytics Roadmap
+## ✅ Development status
 
-### 01 · Executive KPIs
+### Stage 1 — Data foundation
 
-- Total events, users and sessions
-- Purchase-event counts
-- Purchase-value metrics
-- Conversion rates with explicit denominators
-- Daily, weekly and monthly trends
+**Status: Complete as the initial implementation; validation fixes may still be made as issues are discovered.**
 
-### 02 · Revenue and Time-Series Analysis
+- [x] Selected the Kaggle dataset and defined the project scope.
+- [x] Established the staging/enrichment workflow.
+- [x] Created the initial dimension tables and `fact_event` table in the notebook.
+- [x] Began checking warehouse references and table consistency.
 
-- Revenue trends
-- Month-over-month changes
-- Performance by category, brand and product
-- Temporal patterns in shopping activity
+### Stage 2 — SQL analytics
 
-### 03 · Product and Category Analytics
+**Status: In progress.**
 
-- Most-viewed products
-- Most-purchased products
-- Product and category performance
-- High-view / low-purchase products
-- Brand-level comparisons
+- [ ] Monthly trends and month-over-month comparisons.
+- [ ] Product, category and brand rankings.
+- [ ] Customer activity summaries.
+- [ ] Funnel metrics with explicit denominators.
+- [ ] Cohort and retention analysis.
+- [ ] Reconciliation and analytical validation.
 
-### 04 · Funnel Analysis
-
-```text
-VIEW
-  |
-  v
-CART
-  |
-  v
-PURCHASE
+```mermaid
+flowchart LR
+    S1["✅ Stage 1<br/>Data foundation"] --> S2["🟡 Stage 2<br/>SQL analytics"] --> S3["⬜ Stage 3<br/>Validation & insights"] --> S4["⬜ Stage 4<br/>Reporting & polish"]
+    style S1 fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    style S2 fill:#FEF3C7,stroke:#D97706,color:#78350F
+    style S3 fill:#E5E7EB,stroke:#6B7280,color:#111827
+    style S4 fill:#E5E7EB,stroke:#6B7280,color:#111827
 ```
 
-Planned metrics:
+> The warehouse foundation is in place, but a completed table is not automatically a validated table. The next work includes fixing reference checks, confirming dimension-key uniqueness and reconciling fact counts with the source.
 
-- View-to-cart conversion
-- Cart-to-purchase conversion
-- View-to-purchase conversion
-- Funnel drop-off
-- Funnel comparisons by product and category
+## 📊 Planned business questions
 
-Event counts, distinct users and distinct sessions will be analyzed separately.
+- Which products and categories account for the largest observed purchase-event value?
+- How does purchase activity change month to month?
+- Where do users drop off between product views, cart activity and purchases?
+- Which users return in later months?
+- How much of the result is affected by missing IDs, unknown categories or incomplete tracking?
 
-### 05 · Customer Analytics
+These questions will be answered only after their metric definitions and data-quality checks are explicit.
 
-- Customer activity
-- Observed purchase value
-- Purchase frequency and recency
-- New versus returning users
-- Customer-level summaries
-
-### 06 · RFM Segmentation
-
-| Metric | Meaning |
-|---|---|
-| **Recency** | Time since the last observed purchase |
-| **Frequency** | Number of observed purchase occasions |
-| **Monetary** | Observed purchase value |
-
-Potential segments include Champions, Loyal Customers, Recent Customers, At-Risk Customers and Inactive Customers.
-
-Segment definitions will be documented and validated against the observed data.
-
-### 07 · Cohort and Retention Analysis
-
-- First-purchase cohorts
-- Monthly repeat purchasing
-- Cohort retention matrix
-- Customer activity over time
-- Cohort-level purchase-value analysis
-
----
-
-## 🧪 Data Quality and Validation
-
-Planned checks include:
-
-- Missing-value profiling
-- Duplicate detection
-- Data-type validation
-- Timestamp parsing checks
-- Invalid event-type checks
-- Price and identifier validation
-- Dimension-key uniqueness
-- Referential integrity
-- Orphan-record detection
-- Fact-table row-count reconciliation
-- Source-to-warehouse validation
-
-Cleaning rules and exclusions will be documented rather than silently dropping records.
-
----
-
-## ⚠️ Analytical Assumptions and Limitations
+## ⚠️ Definitions and limitations
 
 <details>
-<summary><strong>Order identification</strong></summary>
+<summary><strong>Purchase-event value is not automatically revenue</strong></summary>
 
-The dataset does not provide a conventional explicit order ID. A session identifier must not automatically be treated as a true order ID without validating the source semantics. Any session-based order proxy will be documented as an assumption.
+`price` is a recorded product price. Summing prices on purchase events is described as **purchase-event value** unless the source semantics and counting rules establish that it represents revenue. It must not be presented as verified net revenue or order value by default.
 </details>
 
 <details>
-<summary><strong>Purchase value and revenue</strong></summary>
+<summary><strong>No conventional order ID</strong></summary>
 
-The `price` field is a recorded product price. Summing it across purchase events may not represent definitive order-line revenue or total order value in every context. Metrics will be explicitly defined, and possible double counting will be checked.
+The dataset does not provide a conventional explicit order ID. A `user_session` must not automatically be treated as an order. Any proxy must be labeled and justified.
 </details>
 
 <details>
-<summary><strong>Funnel definitions</strong></summary>
+<summary><strong>Funnel metrics need a clear denominator</strong></summary>
 
-Event counts, distinct users and distinct sessions represent different measures. Each funnel metric must specify its unit, denominator and observation window.
+Event counts, distinct users and distinct sessions are different measures. Every conversion rate should state which unit, observation window and denominator it uses.
 </details>
 
 <details>
-<summary><strong>Customer identity</strong></summary>
+<summary><strong>Observed activity is not the same as lifetime behavior</strong></summary>
 
-User identifiers may not represent complete real-world customer identities. Missing identifiers and tracking limitations will be considered in customer-level analysis.
+The first event in the dataset is not necessarily a user's signup date, and a return visit is not necessarily a repeat purchase. Cohort definitions will state what is actually being measured.
 </details>
 
 <details>
-<summary><strong>Processing constraints</strong></summary>
+<summary><strong>Large-data and session constraints</strong></summary>
 
-The processing strategy will depend on the files attached to the Kaggle notebook and the available memory and execution limits. The project will not assume that all records can safely fit in memory.
+Kaggle sessions have finite memory and temporary storage. Reusable database files or Parquet outputs can reduce repeated processing, but files in `/kaggle/working/` are not guaranteed to survive every session reset unless exported or otherwise persisted.
 </details>
 
----
-
-## 📁 Repository Structure
+## 📁 Planned repository layout
 
 ```text
 ecommerce-data-warehouse/
-│
 ├── README.md
-│
-├── notebooks/
-│   ├── 01_data_ingestion.ipynb
-│   ├── 02_data_quality.ipynb
-│   ├── 03_eda.ipynb
-│   ├── 04_business_analysis.ipynb
-│   ├── 05_customer_analytics.ipynb
-│   ├── 06_product_analytics.ipynb
-│   ├── 07_funnel_analysis.ipynb
-│   ├── 08_rfm_analysis.ipynb
-│   └── 09_cohort_analysis.ipynb
-│
-├── sql/
-│   ├── staging.sql
-│   ├── dimensions.sql
-│   ├── facts.sql
-│   ├── data_quality.sql
-│   └── analytics.sql
-│
-├── src/
-│   ├── ingestion.py
-│   ├── cleaning.py
-│   └── validation.py
-│
-├── docs/
-│   ├── data_dictionary.md
-│   ├── data_model.md
-│   └── business_requirements.md
-│
-├── outputs/
-└── powerbi/
+├── notebooks/       # Reproducible Kaggle analysis notebooks
+├── sql/             # Warehouse and analytical SQL
+├── src/             # Reusable processing and validation helpers
+├── docs/            # Data dictionary and model documentation
+├── outputs/         # Exported summaries and charts
+└── powerbi/         # Optional Power BI-ready artifacts
 ```
 
-*This is the planned structure. Files will be added as implementation progresses.*
+This is the target structure; files will be added as the project develops.
 
----
+## 🎯 Intended deliverables
 
-## 🚧 Development Progress
+- Reproducible notebook workflow
+- Documented fact and dimension model
+- Data-quality and reconciliation checks
+- SQL analytics and reusable data marts
+- Product, category and customer analysis
+- Funnel and cohort analysis
+- Clear visualizations and business findings
+- Power BI-ready exports where useful
 
-**Current status: Work in progress**
+## 👨‍💻 About
 
-| Workstream | Status |
-|---|---|
-| Dataset selected | ✅ |
-| Initial scope and architecture defined | ✅ |
-| Verify attached files and schemas | ⬜ |
-| Complete profiling and quality checks | ⬜ |
-| Implement and validate warehouse | ⬜ |
-| Complete SQL analytics and data marts | ⬜ |
-| Customer and product analytics | ⬜ |
-| Funnel analysis | ⬜ |
-| RFM segmentation | ⬜ |
-| Cohort and retention analysis | ⬜ |
-| Visualizations and reporting outputs | ⬜ |
-| Document verified findings | ⬜ |
+**Shubham Jha** · Data Analytics · Python · SQL · Data Modeling · Business Intelligence
 
-> Update the checklist only after the corresponding work has been implemented and checked.
+I’m building this project to practice the full analytical journey — not just writing queries, but understanding the data, checking the joins, defining metrics carefully and explaining what the results mean.
 
----
+<div align="center">
 
-## 🎯 Expected Deliverables
+**Build carefully. Validate the numbers. Tell the story honestly.**
 
-- Reproducible Kaggle notebooks
-- Data profiling and quality reports
-- Documented dimensional model
-- DuckDB warehouse tables
-- SQL analytics
-- Customer and product analytical datasets
-- Funnel analysis
-- RFM segmentation
-- Cohort and retention analysis
-- Business KPI summaries
-- Visualizations
-- Power BI-ready outputs
-- Technical documentation
-- Evidence-backed business findings and recommendations
+[![Explore dataset](https://img.shields.io/badge/Explore%20the%20dataset-Kaggle-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store)
 
----
-
-## 👨‍💻 Author
-
-**Shubham Jha**
-
-*Data Analytics · Python · SQL · Data Modeling · Business Intelligence*
-
----
-
-<p align="center">
-  <strong>Building from raw events to reliable business insights.</strong>
-  <br>
-  Correctness first. Transparent assumptions. Reproducible analysis.
-  <br><br>
-  <a href="https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store">
-    <img src="https://img.shields.io/badge/Explore%20Dataset-Kaggle-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white" alt="Explore dataset on Kaggle">
-  </a>
-</p>
+</div>
