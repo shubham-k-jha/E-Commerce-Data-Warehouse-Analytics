@@ -136,12 +136,12 @@ The fact table has been created in the current notebook workflow. Validation rem
 
 **Status: In progress.**
 
-- [ ] Monthly trends and month-over-month comparisons.
-- [ ] Product, category and brand rankings.
-- [ ] Customer activity summaries.
-- [ ] Funnel metrics with explicit denominators.
-- [ ] Cohort and retention analysis.
-- [ ] Reconciliation and analytical validation.
+- [X] Monthly trends and month-over-month comparisons.
+- [X] Product, category and brand rankings.
+- [X] Customer activity summaries.
+- [X] Funnel metrics with explicit denominators.
+- [X] Cohort and retention analysis.
+- [X] Reconciliation and analytical validation.
 
 ```mermaid
 flowchart LR
