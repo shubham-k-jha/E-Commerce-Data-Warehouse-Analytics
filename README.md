@@ -196,7 +196,7 @@ The first event in the dataset is not necessarily a user's signup date, and a re
 Kaggle sessions have finite memory and temporary storage. Reusable database files or Parquet outputs can reduce repeated processing, but files in `/kaggle/working/` are not guaranteed to survive every session reset unless exported or otherwise persisted.
 </details>
 
-## 📁 Planned repository layout
+## 📁 Repository layout
 
 ```text
 ecommerce-data-warehouse/
